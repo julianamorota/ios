@@ -13,6 +13,7 @@
 		4443A2A41D95911000354512 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4443A2A31D95911000354512 /* Assets.xcassets */; };
 		4443A2A71D95911000354512 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4443A2A51D95911000354512 /* LaunchScreen.storyboard */; };
 		4443A2AF1D95947200354512 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4443A2AE1D95947200354512 /* TableViewController.swift */; };
+		4443A2B11D99414E00354512 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4443A2B01D99414E00354512 /* CoreLocation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		4443A2A61D95911000354512 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4443A2A81D95911000354512 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4443A2AE1D95947200354512 /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
+		4443A2B01D99414E00354512 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,6 +33,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4443A2B11D99414E00354512 /* CoreLocation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -40,6 +43,7 @@
 		4443A2901D95911000354512 = {
 			isa = PBXGroup;
 			children = (
+				4443A2B01D99414E00354512 /* CoreLocation.framework */,
 				4443A29B1D95911000354512 /* LugaresFavoritos */,
 				4443A29A1D95911000354512 /* Products */,
 			);

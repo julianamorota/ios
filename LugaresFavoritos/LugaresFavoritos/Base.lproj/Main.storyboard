@@ -3,12 +3,13 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Meus Lugares-->
         <scene sceneID="J1m-e4-aF2">
             <objects>
-                <tableViewController id="gpS-Is-g97" sceneMemberID="viewController">
+                <tableViewController id="gpS-Is-g97" customClass="TableViewController" customModule="LugaresFavoritos" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="6cS-vo-EJB">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -21,6 +22,9 @@
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="BYZ-38-t0r" kind="show" id="RXe-9D-74C"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -32,7 +36,7 @@
                         <barButtonItem key="backBarButtonItem" title="Voltar" id="bNJ-f0-yt4"/>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="II5-19-DdV">
                             <connections>
-                                <segue destination="BYZ-38-t0r" kind="show" id="3TX-8J-QSH"/>
+                                <segue destination="BYZ-38-t0r" kind="show" identifier="newPlace" id="3TX-8J-QSH"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -69,16 +73,32 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="EMO-va-HjL">
-                                <rect key="frame" x="40" y="145" width="240" height="128"/>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="EMO-va-HjL">
+                                <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                             </mapView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="EMO-va-HjL" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="JTo-nV-qXq"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="EMO-va-HjL" secondAttribute="bottom" id="QMu-GF-UsW"/>
+                            <constraint firstItem="EMO-va-HjL" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="TJb-R5-ph5"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="EMO-va-HjL" secondAttribute="trailing" constant="-20" id="ZNt-YH-4RG"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="EMO-va-HjL" secondAttribute="bottom" id="Zd3-tf-c4N"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="EMO-va-HjL" secondAttribute="trailing" constant="-20" id="c0y-La-4SI"/>
+                            <constraint firstItem="EMO-va-HjL" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-20" id="nrz-Xt-5hd"/>
+                            <constraint firstItem="EMO-va-HjL" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-20" id="pLk-xT-KzM"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="map" destination="EMO-va-HjL" id="jDh-g7-fRs"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="789" y="-59"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="3TX-8J-QSH"/>
+    </inferredMetricsTieBreakers>
 </document>
