@@ -15,13 +15,102 @@ class TableViewController: UITableViewController {
     var usernames = [""]
     var userIds = [""]
     
-    //array pra saber quem tá seguindo
-    var isFollowing = [false]
+    //dictionary pra saber quem tá seguindo
+    var isFollowing = ["":false]
+    
+    //atualiza a página
+    var refresher:UIRefreshControl!
     
     override func viewDidLoad()
     {
         super.viewDidLoad()
         
+        refresher = UIRefreshControl()
+        refresher.attributedTitle = NSAttributedString(string: "Puxe para atualizar")
+        //o que irá acontecer quando o usuário puxar a tela
+        refresher.addTarget(self, action: #selector(TableViewController.refresh), forControlEvents: UIControlEvents.ValueChanged) //valor alterado
+        self.tableView.addSubview(refresher) //adicionando na view
+        refresh()
+    }
+
+    override func didReceiveMemoryWarning()
+    {
+        super.didReceiveMemoryWarning()
+    }
+
+    override func numberOfSectionsInTableView(tableView: UITableView) -> Int
+    {
+        return 1
+    }
+
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+    {
+        return usernames.count
+    }
+    
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
+    {
+        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath)
+
+        cell.textLabel?.text = usernames[indexPath.row] //pegar os valores da array e exibir na tabela
+        
+        let userId = userIds[indexPath.row]
+        
+        if isFollowing[userId] == true
+        {
+            cell.accessoryType = UITableViewCellAccessoryType.Checkmark //colocar um checkmark ao lado da pessoa seguida
+        }
+
+        return cell
+    }
+    
+    /**
+     * TODA VEZ QUE O USUÁRIO CLICAR EM UMA LINHA
+     **/
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let userId = userIds[indexPath.row]
+        //pegar informações da tabela
+        let cell: UITableViewCell = tableView.cellForRowAtIndexPath(indexPath)!
+
+        //verificar se o current user já está seguindo o usuário
+        //caso esteja, tem que deixar de seguir
+        if isFollowing[userId] == true
+        {
+            isFollowing[userId] = false;
+            cell.accessoryType = UITableViewCellAccessoryType.None
+            let query = PFQuery(className: "Follower")
+            query.whereKey("follower", equalTo: (PFUser.currentUser()?.objectId!)!)
+            query.whereKey("following", equalTo: userId)
+            
+            query.findObjectsInBackgroundWithBlock({ (objects, error) in
+                if let objects = objects
+                {
+                    for object in objects
+                    {
+                        object.deleteInBackground()
+                    }
+                }
+            })
+            
+        }
+        else
+        {
+            cell.accessoryType = UITableViewCellAccessoryType.Checkmark //colocar um checkmark ao lado da pessoa seguida
+            
+            //pegar as informações de seguidores
+            let following = PFObject(className: "Follower")
+            following["following"] = userIds[indexPath.row]
+            following["follower"] = PFUser.currentUser()?.objectId //seguidor = usuário atual logado
+            following.saveInBackground() //salvar sem que nada seja mostrado
+
+        }
+    }
+    
+    /**
+     * TODA VEZ QUE O USUÁRIO PUXAR A TELA PRA ATUALIZAR
+     **/
+    func refresh()
+    {
         //retirar primeiro index em branco
         usernames.removeAll(keepCapacity: true)
         userIds.removeAll(keepCapacity: true)
@@ -56,71 +145,27 @@ class TableViewController: UITableViewController {
                                 //se resultados foram encontrados
                                 if let objects = objects
                                 {
-                                    self.isFollowing.append(true)
-                                }
-                                else
-                                {
-                                    self.isFollowing.append(false)
+                                    if objects.count > 0
+                                    {
+                                        self.isFollowing[user.objectId!] = true
+                                    }
+                                    else
+                                    {
+                                        self.isFollowing[user.objectId!] = false;
+                                    }
                                 }
                                 if self.isFollowing.count == self.usernames.count
                                 {
                                     //reload na tabela
                                     self.tableView.reloadData()
+                                    self.refresher.endRefreshing() //esconder a parte de atualizando
                                 }
-                                
                             })
                         }
                     }
                 }
             }
-            print(self.userIds)
-            print(self.usernames)
-            
-           
         })
-    }
-
-    override func didReceiveMemoryWarning()
-    {
-        super.didReceiveMemoryWarning()
-    }
-
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int
-    {
-        return 1
-    }
-
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
-    {
-        return usernames.count
-    }
-    
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
-    {
-        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath)
-
-        cell.textLabel?.text = usernames[indexPath.row] //pegar os valores da array e exibir na tabela
-        
-        if isFollowing[indexPath.row] == true
-        {
-            cell.accessoryType = UITableViewCellAccessoryType.Checkmark //colocar um checkmark ao lado da pessoa seguida
-        }
-
-        return cell
-    }
-    
-    //TODA VEZ QUE O USUÁRIO CLICAR EM UMA LINHA
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        //pegar informações da tabela
-        let cell: UITableViewCell = tableView.cellForRowAtIndexPath(indexPath)!
-        cell.accessoryType = UITableViewCellAccessoryType.Checkmark //colocar um checkmark ao lado da pessoa seguida
-        
-        //pegar as informações de seguidores
-        let following = PFObject(className: "Follower")
-        following["following"] = userIds[indexPath.row]
-       
-        following["follower"] = PFUser.currentUser()?.objectId //seguidor = usuário atual logado
-        following.saveInBackground() //salvar sem que nada seja mostrado
     }
 
     /*
